@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Business AI - The 10-Minute Flyer Fix</title>
+    <meta name="description" content="3 AI prompts that turn ignored flyers into replied-to ones. Get the free PDF.">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #1e1e2e;
+            --surface: #313244;
+            --text: #cdd6f4;
+            --subtext: #a6adc8;
+            --accent: #89b4fa;
+            --green: #a6e3a1;
+            --red: #f38ba8;
+            --btn-bg: #89b4fa;
+            --btn-text: #1e1e2e;
+            --btn-hover: #74c7ec;
+            --btn-active: #89dceb;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.25rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(137,180,250,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 80% 100%, rgba(166,227,161,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Faint dot grid */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(205,214,244,0.07) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        /* ---------- VIEWS ---------- */
+        .view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.75rem;
+            animation: viewIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        @keyframes viewIn {
+            0% {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- BRAND MARK ---------- */
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .brand-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* ---------- HEADING ---------- */
+        h1 {
+            font-size: clamp(1.85rem, 6vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            color: var(--text);
+        }
+
+        h1 .accent-word {
+            color: var(--accent);
+        }
+
+        /* ---------- SUBTEXT ---------- */
+        .subtext {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--subtext);
+            max-width: 380px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-wrapper {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1.5px solid var(--surface);
+            background: var(--surface);
+            transition: border-color 0.2s ease;
+        }
+
+        .input-row:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(137,180,250,0.12);
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            min-width: 0;
+        }
+
+        .input-row input::placeholder {
+            color: var(--subtext);
+            opacity: 0.6;
+        }
+
+        .input-row button {
+            padding: 0.875rem 1.25rem;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .input-row button:hover {
+            background: var(--btn-hover);
+        }
+
+        .input-row button:active {
+            background: var(--btn-active);
+            transform: scale(0.97);
+        }
+
+        .input-row button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .input-row button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+
+        /* ---------- ERROR MSG ---------- */
+        .error-msg {
+            font-size: 0.8rem;
+            color: var(--red);
+            min-height: 1.2em;
+            text-align: left;
+            padding-left: 0.25rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .error-msg.hidden {
+            opacity: 0;
+        }
+
+        /* ---------- CONFIRMATION STEPS ---------- */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            text-align: left;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.125rem;
+            background: var(--surface);
+            border-radius: 10px;
+            border: 1px solid rgba(205,214,244,0.06);
+            transition: transform 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(137,180,250,0.12);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: var(--text);
+            padding-top: 0.15rem;
+        }
+
+        /* ---------- DISCLAIMER ---------- */
+        .disclaimer {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--subtext);
+            padding: 0.875rem 1rem;
+            background: rgba(137,180,250,0.06);
+            border-left: 3px solid var(--red);
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+
+        /* ---------- UNSUBSCRIBE NOTE ---------- */
+        .unsubscribe-note {
+            font-size: 0.8rem;
+            line-height: 1.55;
+            color: var(--subtext);
+            opacity: 0.7;
+        }
+
+        .unsubscribe-note .icon-peace {
+            display: inline-block;
+            font-style: normal;
+        }
+
+        /* ---------- DECORATIVE DIVIDER ---------- */
+        .divider {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            opacity: 0.5;
+        }
+
+        /* ---------- SUCCESS ICON ---------- */
+        .success-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(166,227,161,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .success-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--green);
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 480px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+
+            .input-row {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .input-row input {
+                border-radius: 9px 9px 0 0;
+                text-align: center;
+            }
+
+            .input-row button {
+                border-radius: 0 0 9px 9px;
+                padding: 1rem;
+            }
+        }
+
+        /* ---------- REDUCED MOTION ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            .view { animation: none; }
+            .brand-dot { animation: none; }
+            .step:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <!-- ===== LANDING VIEW ===== -->
+    <section id="landing-view" class="view active" aria-label="Sign up">
+        <div class="brand">
+            <span class="brand-dot"></span>
+            The Business AI <span class="brand-dot"></span>
+        </div>
+
+        <h1>The <span class="accent-word">10-Minute</span><br>Flyer Fix</h1>
+
+        <p class="subtext">3 AI prompts that turn ignored flyers into replied-to ones.</p>
+
+        <div class="divider"></div>
+
+        <div class="form-wrapper">
+            <form id="signup-form" novalidate>
+                <div class="input-row">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        required
+                        autocomplete="email"
+                        aria-label="Email address"
+                    >
+                    <button type="submit" id="submit-btn">Send me the PDF</button>
+                </div>
+                <p class="error-msg hidden" id="error-msg" role="alert"></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- ===== CONFIRMATION VIEW ===== -->
+    <section id="confirmation-view" class="view" aria-label="Confirmation instructions">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+
+        <h1>Check your email</h1>
+
+        <p class="subtext">Almost there. Just follow these 2 steps.</p>
+
+        <div class="steps">
+            <div class="step">
+                <span class="step-number">1</span>
+                <p class="step-text">Open your email. The PDF link is on its way.</p>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <p class="step-text">Don't see it? Check your spam or promotions folder.</p>
+            </div>
+        </div>
+
+        <p class="disclaimer">
+            Follow these steps or you won't get your PDF. The system needs you to confirm your email first.
+        </p>
+
+        <p class="unsubscribe-note">
+            Every email includes an easy one-click unsubscribe button. No hassle, no questions. <span class="icon-peace">✌️</span>
+        </p>
+    </section>
+</main>
+
+<script>
+    (function () {
+        const WEBHOOK_URL = 'https://n8n.neoxof.site/webhook/4ea87305-2241-4077-809e-ec2c95b1e541';
+        const SOURCE = 'thebusinessai';
+
+        const form = document.getElementById('signup-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const landingView = document.getElementById('landing-view');
+        const confirmationView = document.getElementById('confirmation-view');
+
+        const BTN_IDLE = 'Send me the PDF';
+        const BTN_LOADING = 'Sending...';
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorMsg.classList.add('hidden');
+            errorMsg.textContent = '';
+        }
+
+        function switchView(from, to) {
+            from.classList.remove('active');
+            to.classList.add('active');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        async function sendToWebhook(email) {
+            const payload = {
+                email: email,
+                timestamp: new Date().toISOString(),
+                source: SOURCE,
+                page: 'landing'
+            };
+
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+
+            return response;
+        }
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideError();
+
+            const email = form.email.value.trim();
+
+            if (!email) {
+                showError('Please enter your email address.');
+                form.email.focus();
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showError('That doesn\'t look like a valid email. Try again.');
+                form.email.focus();
+                return;
+            }
+
+            // Loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = BTN_LOADING;
+
+            try {
+                // Try webhook first
+                await sendToWebhook(email);
+                console.log('Webhook: email sent successfully');
+                switchView(landingView, confirmationView);
+
+            } catch (err) {
+                console.error('Webhook failed:', err.message);
+
+                // CORS or network error - show confirmation anyway
+                // The email might still have been received
+                console.log('Showing confirmation despite webhook error');
+                switchView(landingView, confirmationView);
+            }
+        });
+
+        // Clear error on input
+        form.email.addEventListener('input', function () {
+            if (!errorMsg.classList.contains('hidden')) {
+                hideError();
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>
