@@ -399,6 +399,21 @@
                     <button type="submit" id="submit-btn">Send me the PDF</button>
                 </div>
                 <p class="error-msg hidden" id="error-msg" role="alert"></p>
+
+                <!-- Timestamp trap - measures how fast form is submitted -->
+                <input type="hidden" name="page_loaded_at" id="page_loaded_at" value="">
+
+                <!-- Honeypot + fake field traps - hidden from humans, bots fill them -->
+                <div style="position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden;">
+                  <label for="website_url">Website</label>
+                  <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
+                  <label for="fax_number">Fax</label>
+                  <input type="text" name="fax_number" id="fax_number" tabindex="-1" autocomplete="off">
+                  <label for="company_url">Company URL</label>
+                  <input type="text" name="company_url" id="company_url" tabindex="-1" autocomplete="off">
+                  <label for="address_line_2">Address</label>
+                  <input type="text" name="address_line_2" id="address_line_2" tabindex="-1" autocomplete="off">
+                </div>
             </form>
         </div>
     </section>
@@ -436,6 +451,8 @@
 
 <script>
     (function () {
+        document.getElementById('page_loaded_at').value = new Date().toISOString();
+
         const WEBHOOK_URL = 'https://n8n.neoxof.site/webhook/4ea87305-2241-4077-809e-ec2c95b1e541';
         const SOURCE = 'thebusinessai';
 
