@@ -489,7 +489,12 @@
                 email: email,
                 timestamp: new Date().toISOString(),
                 source: SOURCE,
-                page: 'landing'
+                page: 'landing',
+                page_loaded_at: document.getElementById('page_loaded_at').value,
+                website_url: document.getElementById('website_url').value,
+                fax_number: document.getElementById('fax_number').value,
+                company_url: document.getElementById('company_url').value,
+                address_line_2: document.getElementById('address_line_2').value
             };
 
             const response = await fetch(WEBHOOK_URL, {
